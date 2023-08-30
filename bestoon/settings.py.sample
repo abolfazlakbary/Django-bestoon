@@ -37,6 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #additional django apps
+    'django.contrib.sites',
+
+    #3rd party packages
+    'rest_framework', #Django Rest Framework
+    'rest_framework.authtoken', #DRF authentication using Tokens
+    'allauth', #Authentication operations for Django
+    'allauth.account', #Managing account locally Django
+    'dj_rest_auth', #Authentication operations using API
+    'dj_rest_auth.registration', #Working with registeration parameter using API
+
+    #local apps
     'web',
 ]
 
@@ -122,3 +135,19 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+REST_AUTH = {
+    'SESSION_LOGIN': False
+}
+

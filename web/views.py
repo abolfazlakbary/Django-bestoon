@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from json import JSONEncoder
 from django.views.decorators.csrf import csrf_exempt
-from web.models import Expense, Income, Token, User
+from web.models import Expense, Income
 from datetime import datetime
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 @csrf_exempt
 def submit_expense(request):
@@ -11,7 +13,8 @@ def submit_expense(request):
 
     #TODO: validate data, user might be fake, token might be...
     this_token = request.POST['token']
-    this_user = User.objects.filter(token__token= this_token).get()
+    this_token_id = Token.objects.filter(key=this_token).values('user_id').first().get('user_id')
+    this_user = User.objects.filter(id= this_token_id).get()
     if 'date' not in request.POST:
         date = datetime.now()
     else:
@@ -28,7 +31,8 @@ def submit_income(request):
 
     #TODO: validate data, user might be fake, token might be...
     this_token = request.POST['token']
-    this_user = User.objects.filter(token__token= this_token).get()
+    this_token_id = Token.objects.filter(key=this_token).values('user_id').first().get('user_id')
+    this_user = User.objects.filter(id= this_token_id).get()
     if 'date' not in request.POST:
         date = datetime.now()
     else:
@@ -38,3 +42,4 @@ def submit_income(request):
     return JsonResponse({
         'status': 'ok',
     }, encoder=JSONEncoder)
+
